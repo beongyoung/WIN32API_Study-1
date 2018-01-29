@@ -1,6 +1,8 @@
 ## **핵심 API로 배우는 윈도우 프로그래밍(강경우, 한빛아카데미)**
 
+![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/0-1.JPG)
 
+![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/0-2.JPG)
 
 1. 윈도우 프로그래밍기초
 
@@ -8,7 +10,7 @@
 
    ■ 윈도우 프로그램의 특징GUI기반 프로그램이벤트 기반 프로그램 : 윈도우가 이벤트를 감지하고 메시지를 보내면 윈도우 프로그램은 수신한 메시지에 따라 반응함멀티쓰레드 기반 프로그램
 
-   ■ 윈도우 프로그램에서 메시지 처리과정![img]()
+   ■ 윈도우 프로그램에서 메시지 처리과정![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/1-1.JPG)
 
    3.정수값 메시지가 큐에 쌓임
 
