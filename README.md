@@ -342,7 +342,9 @@
 
   ​			UINT 		code; ->컨트롤에 발생한 변화 내용
 
-  ​	} NMHDR;		(LVN_ITEMCHANGING : 리스트 컨트롤의 항목에 변화 발생
+  ​	} NMHDR;		
+
+  (LVN_ITEMCHANGING : 리스트 컨트롤의 항목에 변화 발생
 
   ​					LVN_KEYDOWN: 리스트 컨트롤에서 키보드 누름
 
@@ -390,17 +392,17 @@
 
 ■ MDI 프로그램 작성 순서
 
- 	1. **리소스 편집**
-     - 자식 윈도우를 생성하는 데 사용할 메뉴 항목을 추가WinMain() 함수 작성
-	2. **WinMain() 함수 작성**
-    - WinMain() 함수에 프레임 윈도우와 자식 윈도우를 위한 윈도우 클래스 변수를 선언, 	각 변수의 필드에 값 대입
-    - 만든 윈도우 클래스 변수를 이용해 윈도우 클래스를 2개 등록(RegisterClass)
-    - 프레임 윈도우 생성(CreateWindow,ShowWindow)
-	3. **WndProc() 함수 작성 : 자식 윈도우 생성하기**
-    - 클라이언트 윈도우를 생성하는 코드 추가(클래스 변수설정, CreateWindow,ShowWindow)
-    - 메뉴 항목을 선택했을 때 클라이언트 윈도우가 자식 윈도우를 생성하도록 메시지를 전송하는 코드 작성(클래스변수설정,SendMessage)
-	4. **ChildWndProc() 함수 작성 **
-    - 자식 윈도우에서 발생하는 메시지를 처리하는 코드 작성
+1. **리소스 편집**
+   - 자식 윈도우를 생성하는 데 사용할 메뉴 항목을 추가
+2. **WinMain() 함수 작성**
+   - WinMain() 함수에 프레임 윈도우와 자식 윈도우를 위한 윈도우 클래스 변수를 선언, 	각 변수의 필드에 값 대입
+   - 만든 윈도우 클래스 변수를 이용해 윈도우 클래스를 2개 등록(RegisterClass)
+   - 프레임 윈도우 생성(CreateWindow,ShowWindow)
+3. **WndProc() 함수 작성 : 자식 윈도우 생성하기**
+   - 클라이언트 윈도우를 생성하는 코드 추가(클래스 변수설정, CreateWindow,ShowWindow)
+   - 메뉴 항목을 선택했을 때 클라이언트 윈도우가 자식 윈도우를 생성하도록 메시지를	전송하는 코드 작성(클래스변수설정,SendMessage)
+4. **ChildWndProc() 함수 작성 **
+   - 자식 윈도우에서 발생하는 메시지를 처리하는 코드 작성
 
 ■ 컨트롤 윈도우 활용하기 : 컨트롤도 윈도우이지만 독립적으로 존재하지 않고 부모윈도우에 속한 자식 윈도우의 형태이다. 부모윈도우는 어떤 윈도우라도 가능하다.
 
@@ -491,3 +493,356 @@ OFN.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
 ------
 
 ### 9.윈도우 소켓 프로그래밍
+
+■ **프로젝트 환경에 라이브러리 추가**
+
+​	프로젝트 - 속성 - 구성속성 - 링커 - 명령줄 - ws32_32.lib추가
+
+■ **소켓 연결하기**
+
+​	소켓 : IP주소와 포트번호로 이루어진 컴퓨터 통신의 끝점. 표준화된 인터페이스를 제공
+
+* **소켓 프로그래밍을 위한 구조체**
+
+  * 윈도우 소켓 초기화 정보를 가지고 있는 구조체
+
+    typedef struct WSAData {
+
+    ​	WORD  wVersion;
+
+    ​	WORD                    wHighVersion;
+
+    ​	char                        szDescription[WSADESCRIPTION_LEN+1];
+
+    ​	char                        szSystemStatus[WSASYS_STATUS_LEN+1];
+
+    ​	unsigned short        iMaxSockets;
+
+    ​	unsigned short        iMaxUdpDg;
+
+    ​	char FAR \*              lpVendorInfo;
+
+    };
+
+  * 소켓을 연결할 대상의 주소를 쓰는 구조체
+
+    struct sockaddr_in {
+
+    ​	short   sin_family;
+
+    ​	u_short sin_port;
+
+    ​	struct  in_addr sin_addr;
+
+    ​	char    sin_zero[8];
+
+    };
+
+* **소켓 통신을 위한 함수**
+
+  * 윈속 사용시작하기(서버,클라)
+
+    int FAR WSAStartup {
+
+    ​	WORD wVersionRequired,
+
+    ​	LPWSADATA lpWSAData
+
+    };
+
+  * **소켓 생성하기(서버,클라)**
+
+    SOCKET WSAAPI socket {
+
+    ​	int af,		//address family 명시. AF_INET 이용
+
+    ​	int type, 		//소켓 유형. SOCK_STREAM 이용
+
+    ​	int protocol	//0 입력
+
+    };
+
+  * 주소와 소켓 연결하기(서버)
+
+    BOOL bind {
+
+    ​	SOCKET s,					//연결할 소켓
+
+    ​	const SOCKADDR\* lpSockAddr,	//소켓에 지정할 주소와 포트 번호를 포함하는
+
+    ​								//SOCKADDR구조체 주소
+
+    ​	int nSockAddrLen			//주소를 저장하는 구조체 SOCKADDR크기
+
+    };
+
+  * 연결 요구 기다리기(서버)
+
+    int PASCAL FAR listen {
+
+    ​	SOCKET s,		//기다릴 소켓
+
+    ​	int backlog		//대기할 수 있는 요구 최대 개수 1~5
+
+    };
+
+  * 연결 요구하기(클라)
+
+    BOOL connect {
+
+    ​	SOCKET s,						//연결에 사용할 소켓
+
+    ​	struct SOCKADDR\* lpSockAddr,	//상대의 주소와 포트번호
+
+    ​	int nSockAddrLen				//주소를 저장하는 구조체 SOCKADDR크기
+
+    };
+
+  * 연결 요구 받아들이기(서버)
+
+    SOCKET accept {
+
+    ​	SOCKET s,			//소켓에 대한 요구를 받아들임
+
+    ​	SOCKADDR\* lpSockAddr,	//접속하는 상대방의 주소를 저장할 SOCKADDR구조체 주소
+
+    ​	int\* lpSockAddrLen		//주소를 저장하는 구조체 SOCKADDR**
+
+    };-> 클라이언트와 연결할 소켓을 반환한다.
+
+  * 소켓과 관련된 리소스 해제하기(서버,클라)
+
+    int closesocket(SOCKET s);
+
+  * 윈속 사용 끝내기(서버,클라)
+
+    int WSACleanup();
+
+■ **메시지 교환하기**
+
+- **메시지 송수신 함수**
+
+  - 메시지 전송하기
+
+    int send {
+
+    ​	SOCKET s,		//연결된 소켓
+
+    ​	const void\* lpBuf,	//보낼 메시지가 저장된 버퍼
+
+    ​	int nBufLen,		//메시지의 길이
+
+    ​	int nFlags		//0
+
+    };-> 보낸 메시지 길이 반환
+
+  - 메시지 수신하기
+
+    int recv{
+
+    ​	SOCKET s,		//연결된 소켓
+
+    ​	void\* lpBuf,	//받는 메시지가 저장된 버퍼
+
+    ​	int nBufLen,		//버퍼의길이
+
+    ​	int nFlags		//0
+
+    }; -> 받은 메시지 길이 반환
+
+![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/9-1.JPG)
+
+- **문자집합 변환 함수**
+
+  - 멀티바이트-> 유니코드 변환
+
+    int MultiByteToWideChar{
+
+    ​	In 	UINT CodePage,				//ANSI문자열에 대한 언어. CP_ACP
+
+    ​	In 	DWORD dwFlags,				//0
+
+    ​	In 	LPCSTR lpMultiByteStr,		//변환하려는 멀티바이트 문자열
+
+    ​	In 	int cbMultiByte,				//문자열의 길이. -1이면 자동계산
+
+    ​	Out_opt	LPWSTR lpWideCharStr,	//유니코드로 변환 후 저장될 공간
+    ​	In 	int cchWideChar				//유니코드 문자열의 길이
+
+    }; 
+
+    *5,6 번째를 NULL로 설정시 실제로 변환하지 않고 변환했을 경우의 유니코드 문자열 길이 값을 반환
+
+  - 유니코드 -> 멀티바이트 변환
+
+    int WideCharToMultiByte{
+
+    ​	In 	UINT CodePage,				//ANSI문자열에 대한 언어. CP_ACP
+
+    ​	In 	DWORD dwFlags,				//0
+
+    ​	In 	LPCSTR lpWideCharStr,		//변환하려는 유니코드문자열
+
+    ​	In 	int cchWidChar,				//문자열의 길이. -1이면 자동계산
+
+    ​	Out_opt	LPWSTR lpMultiByteStr,	//멀티바이트로 변환 후 저장될 공간
+    ​	In 	int cbMultiByte				//변환 후 문자열의 길이
+
+    ​	In_opt_	LPCSTR lpDefaultChar,	//NULL
+
+    ​	Out_opt	LPBOOL lpUsedDefaultChar //NULL
+
+    }; 
+
+    *5,6 번째를 NULL로 설정시 실제로 변환하지 않고 변환했을 경우의 멀티바이트 문자열 길이 값을 반환
+
+■ **논블로킹 통신**
+
+- **논블로킹 통신 :** 서버가 무한정 기다리지 않고 다른 일을 하다가 연결을 시도하는 신호가 도착하거나 통신 메시지가 도착하면 사용자가 정의한 윈도우 메시지를 보내는 방식
+
+- 윈도우 메시지, 네트워크 이벤트 등록 함수
+
+  int WSAAsyncSelect{
+
+  ​	SOCKET s,			//연결된 소켓
+
+  ​	HWND hwnd,		//메시지가 발생하는 윈도우 핸들
+
+  ​	unsigned int iMsg,	//등록될 윈도우 메시지
+
+  ​	long IEvent			//등록될 네트워크 이벤트
+
+  }; -> 서버소켓에서 상대방에 의해 네트워크 이벤트가 발생하면 윈도우 메시지(WM_ASYNC)를 hwnd윈도우에 발생시키기 위해 설정한다. 
+
+![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/9-2.JPG)
+
+
+
+
+
+------
+
+### 10.멀티스레드
+
+-  **스레드** : 컴퓨터가 연속된 명령어를 차례로 하나씩 처리하는데, 이렇게 처리되는 명령어의 흐름. 어떠한 프로그램 내에서, 특히 프로세스 내에서 실행되는 흐름의 단위를 말한다. 일반적으로 한 프로그램은 하나의 스레드를 가지고 있지만, 프로그램 환경에 따라 둘 이상의 스레드를 동시에 실행할 수 있다. 이러한 실행 방식을 멀티스레드라고 한다.
+
+![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/10-1.JPG)
+
+- **프로젝트 설정**
+
+  1. C런타임 라이브러리 process.h 파일 포함 -> _beginthreadex() 함수를 이용하여 Win32 API환경에서 멀티스레드 프로그램 작성을 위해
+
+
+  2. 프로젝트 환경에 멀티스레드 DLL 설정 -> 프로젝트속성 - 구성속성 - C/C++ - 코드 생성 - 런타임 라이브러리 - 다중스레드 디버그 DLL(/MDd)로 설정
+
+■ **스레드 생성하기**
+
+- **스레드 생성 및 종료 함수**
+
+  - 스레드 생성하기
+
+    int WSAAsyncSelect{
+
+    ​	uintptr_t	_beginthreadex(			//스레드 핸들 값 반환
+
+    ​	void\*	*Security,				//SECURITY_ATTRIBUTES 구조체의 포인터 변수, NULL사용
+
+    ​	unsigned	_StackSize,			//스레드를 위한 스택의 크기, 0사용
+
+    ​	unsgined	(\*start_address)(void *),	//스레드로 실행할 함수 이름(형변환필요!)
+
+    ​	void\*	*ArgList,					//스레드 함수에 전달될 매개변수 주소
+
+    ​	unsigned	InitFlag,				//스레드 상태 지정 값으로 실행하기 위해 0사용
+
+    ​	unsigned\*	*thrdAddr			//스레드 ID를 받기 위한 32비트 포인터변수, NULL사용
+
+    };
+
+  - 스레드 종료하기
+
+    void _endthreadex{
+
+    ​	unsigned retval	//반환을 원하는 값
+
+    };
+
+  - 스레드 정리하기
+
+    BOOL WINAPI CloseHandle{
+
+    ​	HANDLE hObject
+
+    };
+
+■ **스레드 동기화하기**
+
+- **이벤트** : 스레드간의 동기를 맞추는 데 사용되는 동기화 개체
+
+- **이벤트 관련 함수**
+
+  - 이벤트 생성하기
+
+    CreateEvent{						//이벤트 핸들 값 반환
+
+    ​	LPSECURITY_ATTRIBUTES lpEventAttributes,	//보안 속성, 보통 NULL사용
+
+    ​	BOOL bManualReset,				//시그널/넌시그널 수동 변환 설정
+
+    ​									//TRUE : SetEvent,ResetEvent로 이벤트
+
+    ​									//값 수동변환 잘 해야함
+
+    ​									//FALSE : WaitForSingleObject함수가
+
+    ​									이벤트 변환을 자동으로 수행
+
+    ​	BOOL bInitialState,				//초기상태
+
+    ​									//TRUE:시그널 상태로 이벤트 생성
+
+    ​									//FALSE:넌시그널 상태로 이벤트 생성
+
+    ​	LPCWSTR lpName);				//이벤트 이름, 보통NULL사용
+
+    };
+
+  - 이벤트 설정하기
+
+    SetEvent{				//이벤트를 시그널 상태로 변환
+
+    ​	HANDLE hEvent);		//이벤트 핸들
+
+  - 이벤트 재설정(리셋)하기
+
+    BOOL ResetEvent{	//이벤트를 넌시그널 상태로 변환
+
+    ​	HANDLE hEvent);	//이벤트 핸들
+
+  - 단일 개체 대기하기
+
+    DWORD WaitForSingleObject{
+
+    ​	HANDLE hHandle,		//대기할 개체의 핸들
+
+    ​	DWORD dwMilliseconds);	//대기 시간, INFINITE는 무한정 대기
+
+    -> hHandle의 시그널상태이면 진행, 넌시그널상태이면 dwMilliseconds동안 대기, 여러개 스레드가 동시에 대기 중이면 이 중 하나만 대기에서 풀리고 나머지는 계속 대기
+
+  - 복수 개체 대기하기
+
+    DWORD WaitForMultipleObjects{
+
+    ​	DWORD nCount,				//대기할 개체의 개수
+
+    ​	const HANDLE \*lpHandles,	//기다릴 개체들의 핸들
+
+    ​	BOOL bWaitAll,				//대기할 개체가 모두 기다려야 하는지 여부
+
+    ​								//TRUE : 모든 개체가 시그널 상태가 되기를 대기	
+
+    ​								//FALSE : 1개의 개체라도 시그널 상태가 되기를 대기
+
+    ​	DWORD dwMilliseconds);		//대기 시간
+
+    -> lpHandles개체가 모두 시그널상태인지 검사. 넌시그널상태이면 bWaitAll의 값에 따라 대기
