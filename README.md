@@ -4,7 +4,7 @@
 
 ![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/0-2.JPG)
 
-#### 1.윈도우 프로그래밍 기초
+### 1.윈도우 프로그래밍 기초
 
 ■ **윈도우 SDK** : 윈도우 API로 구현한 라이브러리나 헤더파일들
 
@@ -33,7 +33,9 @@
 
 
 
-#### 2.윈도우 기본 입출력
+------
+
+### 2.윈도우 기본 입출력
 
 ■ **DC(device context)** : 출력을 위해 얻어온 화면 영역
 
@@ -64,7 +66,9 @@
 
 
 
-#### 3.제어 메시지 처리하기
+------
+
+### 3.제어 메시지 처리하기
 
 **■ 마우스에서 발생하는 메시지** 
 
@@ -85,33 +89,37 @@
 
 
 
-#### 4.윈도우 메뉴
+------
+
+### 4.윈도우 메뉴
 
 ■ **리소스 :** 윈도우 프로그램에서 화면을 통해 사용자에게 입력받고  출력하는 코드 외의 부분
 
-■ 메뉴항목에서  WM_COMMAND메시지 발생 -> iMsg에 저장되어 WndProc()에 전달
+■ **메뉴항목에서  WM_COMMAND메시지 발생 -> iMsg에 저장되어 WndProc()에 전달**
 
 ![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/4-1.JPG)
 
-■ **tchar_t \*fgetts(tchar_t *str, int n, FILE *fPtr) :** fPtr파일에서 한 줄을 읽어와 str에 저장. 파일의 끝을 만나면 NULL반환
+■ tchar_t \*fgetts(tchar_t *str, int n, FILE *fPtr) : fPtr파일에서 한 줄을 읽어와 str에 저장. 파일의 끝을 만나면 NULL반환
 
-■ **int *fputts(const tchar_t *str, FILE *fPtr) :** str문자열을 fPtr파일에 출력함
+■ int *fputts(const tchar_t *str, FILE *fPtr) : str문자열을 fPtr파일에 출력함
 
-■ **errno-t _tfopen_s(FILE fPtr, const tchar_t *filename, const tchar_t *mode) :** 열고자하는 filename으로 파일을 연후 fPtr에 연 파일 포인터저장
+■ errno-t _tfopen_s(FILE fPtr, const tchar_t *filename, const tchar_t *mode) :*열고자하는 filename으로 파일을 연후 fPtr에 연 파일 포인터저장
 
-■ **int _stprintf_s(tchar_t (&buffer)[size], const tchar_t *format, argument…) :** format이 가리키는 문자열을 buffer공간으로 복사한다. 반환값은 출력한 문자열의 길이이고 오류 발생시 -1반환.
+■ int _stprintf_s(tchar_t (&buffer)[size], const tchar_t *format, argument…) : format이 가리키는 문자열을 buffer공간으로 복사한다. 반환값은 출력한 문자열의 길이이고 오류 발생시 -1반환.
 
-■ **int _tcscmp(const tchar_t *string1, const tchar_t *string2) :** string1,string2을 비교 -> string1-string2 
+■ int _tcscmp(const tchar_t *string1, const tchar_t *string2) : string1,string2을 비교 -> string1-string2 
 
-■ **char *strtok_s(char *strToken, const char *strDelimit, char context) :** 문자열 자르기
-
-
+■ char *strtok_s(char *strToken, const char *strDelimit, char context) : 문자열 자르기
 
 
 
-#### 5.단축키와 비트맵
 
-**■ 단축키 설정단계  **
+
+------
+
+### 5.단축키와 비트맵
+
+■ **단축키 설정단계**
 
 1. 메뉴 속성창의 Caption에 단축키 표시   
 
@@ -148,7 +156,9 @@
 
 
 
-#### 6.대화상자와 컨트롤
+------
+
+### 6.대화상자와 컨트롤
 
 ■ 대화상자 이용
 
@@ -189,7 +199,7 @@
   - EN_VSCROLL : 에디트 컨트롤의 수직 스크롤바 선택
   - EN_SETFOCUS : 에디트 컨트롤이 포커스를 받음
 
-**■ 콤보박스 컨트롤 **: 항목의 리스트 컨트롤을 보여주어 이 중 하나를 선택할 때 사용
+■ **콤보박스 컨트롤** : 항목의 리스트 컨트롤을 보여주어 이 중 하나를 선택할 때 사용
 
 - 통지 정보 종류
 
@@ -238,7 +248,7 @@
 
     ​	lParam : 사용x
 
-**■ 리스트박스 컨트롤 **: 외부 입력 없이 여러 개의 항목을 일렬로 보여주는 컨트롤
+■ **리스트박스 컨트롤** : 외부 입력 없이 여러 개의 항목을 일렬로 보여주는 컨트롤
 
 - 통지 정보 종류
 
@@ -372,6 +382,112 @@
 
 
 
-#### 7.MDI 프로그래밍
+------
+
+### 7.MDI 프로그래밍
 
 ![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/7-1.JPG)
+
+■ MDI 프로그램 작성 순서
+
+ 	1. **리소스 편집**
+     - 자식 윈도우를 생성하는 데 사용할 메뉴 항목을 추가WinMain() 함수 작성
+	2. **WinMain() 함수 작성**
+    - WinMain() 함수에 프레임 윈도우와 자식 윈도우를 위한 윈도우 클래스 변수를 선언, 	각 변수의 필드에 값 대입
+    - 만든 윈도우 클래스 변수를 이용해 윈도우 클래스를 2개 등록(RegisterClass)
+    - 프레임 윈도우 생성(CreateWindow,ShowWindow)
+	3. **WndProc() 함수 작성 : 자식 윈도우 생성하기**
+    - 클라이언트 윈도우를 생성하는 코드 추가(클래스 변수설정, CreateWindow,ShowWindow)
+    - 메뉴 항목을 선택했을 때 클라이언트 윈도우가 자식 윈도우를 생성하도록 메시지를 전송하는 코드 작성(클래스변수설정,SendMessage)
+	4. **ChildWndProc() 함수 작성 **
+    - 자식 윈도우에서 발생하는 메시지를 처리하는 코드 작성
+
+■ 컨트롤 윈도우 활용하기 : 컨트롤도 윈도우이지만 독립적으로 존재하지 않고 부모윈도우에 속한 자식 윈도우의 형태이다. 부모윈도우는 어떤 윈도우라도 가능하다.
+
+- 리치 에디트 컨트롤 윈도우에 보내는 iMsg
+
+  - EM_SETCHARFORMAT : CHARFORMAT 구조체에 설정한 글꼴을 리치 에디트 컨트롤의 텍스트에 적용		-wParam : 글꼴 변화를 적용할 영역을 알려주는 플래그값
+
+    ​		SCF_ALL : 컨트롤에 있는 모든 텍스트에 적용
+
+    ​		SCF_SELECTION : 현재 석택된 텍스트 영역에 적용
+
+    ​		SCF_WORD : 선택된 문자에 적용
+
+    -lParam : CHARFORMAT 구조체 값에 대한 포인터
+
+  - EM_GETCHARFORMAT : 리치에디트 컨트롤의 텍스트 글꼴 정보를 CHARFORMAT 구조체에 얻어온다.
+
+    -wParam : 얻어오고자 하는 것을 알려주는 플래그 값
+
+    ​		SCF_DEFAULT : 기본값으로 설정한 글꼴 정보
+
+    ​		SCF_SELECTION : 선택 영역의 글꼴 정보
+
+    -lParam : CHARFORMAT 구조체 값에 대한 포인터 (메시지를 전송하면 구조체에 얻어온 글꼴정보가 저장됨)
+
+  - EM_GETSELTEXT: 리치에디트 컨트롤에서 선택한 텍스트 영역을 버퍼에 복사해 오기 위해 보냄	
+
+    -wParam : x
+
+    -lParam : 버퍼의 시작주소값 (버퍼크기>선택한 텍스트 크기)
+
+    -반환값 : 복사한 텍스트의 길이
+
+  - EM_SETBKGNDCOLOR : 리치에디트 컨트롤의 배경 색을 변경하기 위해 보냄
+
+    -wParam : 0아니면 -> 배경색으로 부모윈도우 배경색을 이용
+
+    ​		   0이면 -> 변경하고자 하는 색상정보를  COLORREF 형식으로 lParam을 통해 제공
+
+  - EM_SETFONTSIZE : 선택한 텍스트의 글꼴 크기를 조정
+
+    -wParam : 글꼴 크기 정로수로 전달
+
+    -lParam : 0
+
+
+
+
+
+------
+
+### 8.파일 입출력
+
+■ **파일 다루기**
+
+작업 디렉터리 : 읽어들이거나 쓰는 파일이 저장될 디렉터리 
+
+순서 
+
+1. 파일 만들기/열기(CreateFile())
+
+
+2. 파일 읽기(ReadFile()-파일의 내용을 버퍼에 저장) / 파일 쓰기(WriteFile()-버퍼의 내용을 파일에 저장)
+3. 파일 닫기(CloseHandle())
+
+■ **파일 이름을 여러 개 저장하는 형식**
+
+static char filepath[1000];
+
+static char folder[100];
+
+static char filename[1000];
+
+LPSTR pStr;
+
+
+
+OFN.lpstrFile = filepath;
+
+OFN.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+
+![img](https://github.com/wjdgh283/WIN32API_Study/blob/master/image%20src/8-1.JPG)
+
+
+
+
+
+------
+
+### 9.윈도우 소켓 프로그래밍
